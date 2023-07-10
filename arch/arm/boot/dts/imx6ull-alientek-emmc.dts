@@ -186,14 +186,24 @@
 		interrupts = <18 IRQ_TYPE_EDGE_BOTH>;
 		status = "okay";
 	};	
-	dtsleds {
+	dtsleds {						/* 编写内核驱动可匹配的gpio节点 */
 		compatible = "gpio-leds";	/* 官方驱动的属性名字 */
-
 		led0 {
 			label = "red";
 			gpios = <&gpio1 3 GPIO_ACTIVE_LOW>;
 			linux,default-trigger = "heartbeat";
 			default-state = "on";
+		};
+	};
+	gpio-keys {						/* 编写内核驱动可匹配的按键节点 */
+		compatible = "gpio-keys";
+		#address-cells = <1>;
+		#size-cells = <0>;
+		autorepeat;					/* 按键支持连按功能 */
+		key0 {
+			label = "GPIO Key Enter";
+			linux,code = <KEY_ENTER>;
+			gpios = <&gpio1 18 GPIO_ACTIVE_LOW>;
 		};
 	};
 };
