@@ -68,7 +68,7 @@
 			regulator-name = "VSD_3V3";
 			regulator-min-microvolt = <3300000>;
 			regulator-max-microvolt = <3300000>;
-			gpio = <&gpio1 9 GPIO_ACTIVE_HIGH>;
+			/*gpio = <&gpio1 9 GPIO_ACTIVE_HIGH>;*/
 			enable-active-high;
 		};
 
@@ -301,6 +301,19 @@
 	pinctrl-0 = <&pinctrl_i2c2>;
 	status = "okay";
 
+	/*alientek增加屏幕IC*/
+	gt9147: gt9147@14 {
+		compatible = "goodix,gt9147";
+		reg = <0x14>;
+		pinctrl-names = "default";
+		pinctrl-0 = <&pinctrl_tsc
+					&pinctrl_tsc_reset >;
+		interrupt-parent = <&gpio1>;
+		interrupts = <9 0>;
+		reset-gpios = <&gpio5 9 GPIO_ACTIVE_LOW>;
+		interrupt-gpios = <&gpio1 9 GPIO_ACTIVE_LOW>;
+	};
+
 	codec: wm8960@1a {
 		compatible = "wlf,wm8960";
 		reg = <0x1a>;
@@ -338,7 +351,7 @@
 			fsl,pins = <
 				MX6UL_PAD_UART1_RTS_B__GPIO1_IO19	0x17059 /* SD1 CD */
 				MX6UL_PAD_GPIO1_IO05__USDHC1_VSELECT	0x17059 /* SD1 VSELECT */
-				MX6UL_PAD_GPIO1_IO09__GPIO1_IO09        0x17059 /* SD1 RESET */
+				/*MX6UL_PAD_GPIO1_IO09__GPIO1_IO09        0x17059  SD1 RESET  */
 			>;
 		};
 
@@ -480,14 +493,11 @@
 			>;
 		};
 
-		/*pinctrl_tsc: tscgrp {
+		pinctrl_tsc: tscgrp {
 			fsl,pins = <
-				MX6UL_PAD_GPIO1_IO01__GPIO1_IO01	0xb0
-				MX6UL_PAD_GPIO1_IO02__GPIO1_IO02	0xb0
-				MX6UL_PAD_GPIO1_IO03__GPIO1_IO03	0xb0
-				MX6UL_PAD_GPIO1_IO04__GPIO1_IO04	0xb0
+				MX6UL_PAD_GPIO1_IO09__GPIO1_IO09	0xF080	/* TSC_INT，输入中断引脚 */
 			>;
-		};*/
+		};
 
 		pinctrl_uart1: uart1grp {
 			fsl,pins = <
@@ -662,7 +672,7 @@
 		pinctrl_lcdif_reset: lcdifresetgrp {
                         fsl,pins = <
                                 /* used for lcd reset */
-                                MX6ULL_PAD_SNVS_TAMPER9__GPIO5_IO09  0x79
+                                /*MX6ULL_PAD_SNVS_TAMPER9__GPIO5_IO09  0x79*/
                         >;
                 };
 
@@ -675,9 +685,14 @@
                         >;
                 };
 
-                pinctrl_sai2_hp_det_b: sai2_hp_det_grp {
+        pinctrl_sai2_hp_det_b: sai2_hp_det_grp {
                         fsl,pins = <
                                 MX6ULL_PAD_SNVS_TAMPER4__GPIO5_IO04   0x17059
+                        >;
+                };
+        pinctrl_tsc_reset: tsc_reset {
+                        fsl,pins = <
+                                MX6ULL_PAD_SNVS_TAMPER9__GPIO5_IO09   0x10B0  /* 输出io电气属性值 */
                         >;
                 };
         };
@@ -755,7 +770,7 @@
 
 	status = "okay";
 };
-
+/*官方自带电阻触摸屏*/
 /*&tsc {
 	pinctrl-names = "default";
 	pinctrl-0 = <&pinctrl_tsc>;
