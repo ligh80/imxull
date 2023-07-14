@@ -292,7 +292,14 @@
 		compatible = "alientek,ap3216c";
 		reg = <0x1e>;
 	};
-
+	
+	codec: wm8960@1a {
+		compatible = "wlf,wm8960";
+		reg = <0x1a>;
+		clocks = <&clks IMX6UL_CLK_SAI2>;
+		clock-names = "mclk";
+		wlf,shared-lrclk;
+	};
 };
 
 &i2c2 {
@@ -314,13 +321,7 @@
 		interrupt-gpios = <&gpio1 9 GPIO_ACTIVE_LOW>;
 	};
 
-	codec: wm8960@1a {
-		compatible = "wlf,wm8960";
-		reg = <0x1a>;
-		clocks = <&clks IMX6UL_CLK_SAI2>;
-		clock-names = "mclk";
-		wlf,shared-lrclk;
-	};
+
 
 	ov5640: ov5640@3c {
 		compatible = "ovti,ov5640";
